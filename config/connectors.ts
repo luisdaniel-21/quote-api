@@ -1,17 +1,19 @@
-import { MySQLConnector, MongoDBConnector } 
+
+import { MongoClient, ClientMariaDB } 
     from "../dependences.ts";
 
-export const connectorMariaDB = new MySQLConnector({
-    database: 'quotes',
-    host: 'localhost',
-    username: 'devDeno',
-    password: 't0ps3cr3t',
-    port: 3306, //modificar el puerto segun este en MariaDB
-});
 
-export  const connectorMongoDB = new MongoDBConnector({
-    //uri:'mongodb://cardoso:t0ps3cr3t@localhost:27017/?authMechanism=SCRAM-SHA-256&authSource=quotes',
-    //uri: 'mongodb://daniel:luis1@localhost:27017',
-    uri: 'mongodb://daniel:luis1@172.17.0.2:27017',    //Configurar segun MongoDB
-    database: 'quotes',
-});
+const mongoClient = new MongoClient();
+const URI_MONGO="mongodb://itvoDeveloper:********@localhost:27017/quotes?authMechanism=SCRAM-SHA-256&authSource=admin";
+export const connectorMongoDB = await mongoClient.connect(URI_MONGO);
+
+const CONN_MARIADB = {
+    hostname: "localhost",
+    port: 3308,
+    username: "devDeno",
+    password: "**********",
+    db: "quotes",
+    poolSize: 10};
+
+export const connectorMariaDB = await new ClientMariaDB().connect(CONN_MARIADB);
+

@@ -124,7 +124,8 @@ export const updateQuote = async (
             const updatedQuote = await quoteService.updateQuote(
                 Number(params.id),
                 {"id":Number(params.id,), 
-                "quote":data.quote,"author":data.author },
+                "quote":data.quote,
+                "author":data.author },
             );
             if (updatedQuote) {
                 response.status = Status.OK;

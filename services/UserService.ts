@@ -2,13 +2,13 @@ import { User } from "../interfaces/User.ts";
 import { default as userRepository  } 
     from "../repositories/UserRepository.ts";
 
-import { shaEncrypt } from "../utils/encodehelper.ts";
+import  sha512 from "../dependences.ts";
 
 
 class UserService {
 
     isLoginUser = async (account: string, password: string)=>{
-        password = shaEncrypt(password);    
+        password = await sha512(password);   
         return await userRepository.isLogin(account, password);
         
     }
@@ -28,13 +28,8 @@ class UserService {
         return await userRepository.addUser(user)  
     };
 
-    updateUser = async (user: User, id: number) => {
-            const updatedUser: {
-            id: number;
-            account: string;
-            password: string;
-        } = user;
-        
+    updateUser = async (id: number, user:User) => {  
+        user.password = await sha512(user.password); 
         return await userRepository.updateUser(id,user);
     };
 

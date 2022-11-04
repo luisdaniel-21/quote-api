@@ -4,54 +4,47 @@ import { QuoteModel } from "../models/QuoteModel.ts";
 class QuoteRepository { 
 
     async getQuotes(page: number, size: number)  { 
+
+        const cursor = QuoteModel.find();
         //--- paginate
-        const quotes = await QuoteModel.skip((page-1) * size)
-                        .take(page*size).get();
-        return  quotes; 
+        cursor.skip((page-1) * size)
+                       .limit(page*size);
+
+        return  await cursor.toArray(); 
     } 
    
     async getQuoteByoid(oid: string) { 
-        return await QuoteModel.find(oid); 
+        return await QuoteModel.findOne({"_id":oid}); 
     } 
     
-    async getQuote(id: number) { 
-        return  await QuoteModel.where("id", id ).get();
+    async getQuote(quoteId: number) { 
+        return  await QuoteModel.find({id: quoteId} ).toArray();
     } 
 
-    async searchQuoterManyCols(fields: any) {
-        return await QuoteModel.where(fields).get()
-    }
-
-    async getQuoteSort(fields: any) { 
-        return await QuoteModel.orderBy(fields).all(); 
-    }
-
     async addQuote(quote: Quote) { 
-        const newQuote = new QuoteModel(); 
-        newQuote.id = quote.id;
-        newQuote.quote= quote.quote;
-        newQuote.author = quote.author;
-
-        return await newQuote.save();
+        await QuoteModel.insertOne(quote);
+        return quote;
     }
 
     
 
     async updateQuote(id: number, quote: Quote) { 
-
-        let quoteUpdated = await QuoteModel.where("id", id ).update(
-            {
-                id: quote.id, 
-                quote: quote.quote,
-                author: quote.author
-            }
-        );
+        await QuoteModel.updateOne(
+            { "id": id},
+                { $set: {
+                    id: quote.id, 
+                    quote: quote.quote,
+                    author: quote.author
+                } 
+            },
+          );
+        let quoteUpdated= await  this.getQuote(id);
         return quoteUpdated;
     }
 
     async deleteQuote(id: number) {    
         let quote= await this.getQuote(id) ;
-        await QuoteModel.where("id", id ).delete();
+        await QuoteModel.deleteOne({ "id": id });
         return quote;
     }
 

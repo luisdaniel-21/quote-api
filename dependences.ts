@@ -24,18 +24,17 @@ import type { Header as jwtHeader,
 import { config } 
     from "https://deno.land/x/dotenv/mod.ts";
 
-import { sha512 as shaEncryption } 
+import  sha512 
     from "./utils/sha512.ts";
+    
+import {
+    Bson,
+    MongoClient,
+} from "https://deno.land/x/mongo@v0.31.1/mod.ts";
 
-/*
-import { 
-    DataTypes, 
-    Database, 
-    Model, 
-    MySQLConnector, 
-    MongoDBConnector, 
-   }  from "https://deno.land/x/denodb/mod.ts"; 
-*/
+import { Client as ClientMariaDB } from "https://deno.land/x/mysql/mod.ts";
+
+
 export const { JWT_SECRET } = config({ safe: true });
 
 
@@ -47,15 +46,14 @@ export { Application, Router, Context, Status,
 
 export type {jwtHeader, jwtPayload }; 
 
-export { shaEncryption };
+export default sha512 ;
 
-export { 
-    DataTypes, 
-    Database,
-    Model, 
-    MySQLConnector, 
-    MongoDBConnector, 
-}; 
-
+export {    
+    Bson,
+    MongoClient,
+}
+export {    
+    ClientMariaDB,
+}
 
 
