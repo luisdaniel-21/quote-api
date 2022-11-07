@@ -4,7 +4,7 @@ import { MongoClient, ClientMariaDB }
 
 
 const mongoClient = new MongoClient();
-const URI_MONGO="mongodb://daniel:12345@localhost:27017/quotes?authMechanism=SCRAM-SHA-256&authSource=quotes";
+const URI_MONGO="mongodb://daniel:12345@localhost:27017/quotes?authMechanism=SCRAM-SHA-256&authSource=admin";
 export const connectorMongoDB = await mongoClient.connect(URI_MONGO);
 
 const CONN_MARIADB = {
